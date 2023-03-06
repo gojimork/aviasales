@@ -4,6 +4,9 @@ const TransplantFilter = ({
   transfers,
   onAllChange,
   onWithoutTransfersChange,
+  onOneTransferChange,
+  onTwoTransfersChange,
+  onThreeTransfersChange,
 }) => {
   const filterData = [
     { text: "Все", key: "all", onChange: onAllChange },
@@ -12,9 +15,17 @@ const TransplantFilter = ({
       key: "withoutTransfers",
       onChange: onWithoutTransfersChange,
     },
-    { text: "1 пересадка", key: "oneTransfer" },
-    { text: "2 пересадки", key: "twoTransfers" },
-    { text: "3 пересадки", key: "threeTransfers" },
+    { text: "1 пересадка", key: "oneTransfer", onChange: onOneTransferChange },
+    {
+      text: "2 пересадки",
+      key: "twoTransfers",
+      onChange: onTwoTransfersChange,
+    },
+    {
+      text: "3 пересадки",
+      key: "threeTransfers",
+      onChange: onThreeTransfersChange,
+    },
   ];
   const transfersNodes = filterData.map(({ text, key, onChange }) => (
     <li key={key}>
@@ -50,6 +61,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAllChange: () => dispatch({ type: "all" }),
     onWithoutTransfersChange: () => dispatch({ type: "withoutTransfers" }),
+    onOneTransferChange: () => dispatch({ type: "oneTransfer" }),
+    onTwoTransfersChange: () => dispatch({ type: "twoTransfers" }),
+    onThreeTransfersChange: () => dispatch({ type: "threeTransfers" }),
   };
 };
 

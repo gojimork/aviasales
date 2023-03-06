@@ -1,19 +1,27 @@
 import { connect } from "react-redux";
 
-const TransplantFilter = ({ transfers, onAllClick }) => {
+const TransplantFilter = ({
+  transfers,
+  onAllChange,
+  onWithoutTransfersChange,
+}) => {
   const filterData = [
-    { text: "Все", id: "all" },
-    { text: "Без пересадок", id: "withoutTransfers" },
-    { text: "1 пересадка", id: "oneTransfer" },
-    { text: "2 пересадки", id: "twoTransfers" },
-    { text: "3 пересадки", id: "threeTransfers" },
+    { text: "Все", key: "all", onChange: onAllChange },
+    {
+      text: "Без пересадок",
+      key: "withoutTransfers",
+      onChange: onWithoutTransfersChange,
+    },
+    { text: "1 пересадка", key: "oneTransfer" },
+    { text: "2 пересадки", key: "twoTransfers" },
+    { text: "3 пересадки", key: "threeTransfers" },
   ];
-  const transfersNodes = filterData.map(({ text, id }) => (
-    <li key={id}>
+  const transfersNodes = filterData.map(({ text, key, onChange }) => (
+    <li key={key}>
       <label>
         <input
-          onChange={onAllClick}
-          checked={transfers[id]}
+          onChange={onChange}
+          checked={transfers[key]}
           type="checkbox"
           className="input visuable-hidden"
         />
@@ -40,7 +48,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAllClick: () => dispatch({ type: "all" }),
+    onAllChange: () => dispatch({ type: "all" }),
+    onWithoutTransfersChange: () => dispatch({ type: "withoutTransfers" }),
   };
 };
 

@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import "./transplant-filter.scss";
 
 const TransplantFilter = ({
   transfers,

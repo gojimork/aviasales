@@ -1,5 +1,6 @@
 import React from "react";
-import s7Logo from "../assets/s7-logo.svg";
+import s7Logo from "../../assets/s7-logo.svg";
+import "./tickets.scss";
 const Tickets = () => {
   return (
     <React.Fragment>

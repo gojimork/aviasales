@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { connect } from "react-redux";
+import "./priority-filter.scss";
 
 const PriorityFilter = ({ priorities }) => {
   const priorityNames = [

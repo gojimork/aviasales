@@ -141,7 +141,7 @@
   border-bottom-right-radius: 5px;
 }
 
-.filter-item:hover {
+.filter-item--active {
   background-color: #2196f3;
   color: #ffffff;
 }
@@ -243,6 +243,6 @@
   color: #ffffff;
 }
 
-.more-tickets:hover {
+button:hover {
   opacity: 0.5;
 }

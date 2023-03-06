@@ -23,7 +23,6 @@ const reducer = (state = initialState, action) => {
       transfers;
     if (withoutTransfers && oneTransfer && twoTransfers && threeTransfers) {
       transfers.all = true;
-      console.log(3);
     }
   };
 

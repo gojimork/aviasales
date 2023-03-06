@@ -1,5 +1,5 @@
-import TransplantFilter from "../transplant-filter/transplant-filter.js";
-import PriorityFilter from "../priority-filter/priority-filter.js";
+import TransplantFilter from "../transplant-filter";
+import PriorityFilter from "../priority-filter";
 import "./app.scss";
 import logo from "../../assets/logo.svg";
 import Tickets from "../tickets/tickets.js";

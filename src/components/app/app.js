@@ -1,17 +1,17 @@
-import TransplantFilter from "../transplant-filter";
-import PriorityFilter from "../priority-filter";
-import "./app.scss";
-import logo from "../../assets/logo.svg";
-import Tickets from "../tickets/tickets.js";
+import TransplantFilter from '../transplant-filter';
+import PriorityFilter from '../priority-filter';
+import classes from './app.module.scss';
+import logo from '../../assets/logo.svg';
+import Tickets from '../tickets';
 
 function App() {
   return (
-    <div className="App">
-      <div className="app-wrapper">
-        <div className="header">
+    <div className={classes.app}>
+      <div className={classes['app-wrapper']}>
+        <div className={classes.header}>
           <img src={logo} alt="logo" />
         </div>
-        <div className="main">
+        <div className={classes.main}>
           <TransplantFilter />
           <PriorityFilter />
           <Tickets />

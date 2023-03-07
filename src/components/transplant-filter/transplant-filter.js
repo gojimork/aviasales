@@ -1,5 +1,5 @@
-import { connect } from "react-redux";
-import "./transplant-filter.scss";
+import { connect } from 'react-redux';
+import classes from './transplant-filter.module.scss';
 
 const TransplantFilter = ({
   transfers,
@@ -10,21 +10,21 @@ const TransplantFilter = ({
   onThreeTransfersChange,
 }) => {
   const filterData = [
-    { text: "Все", key: "all", onChange: onAllChange },
+    { text: 'Все', key: 'all', onChange: onAllChange },
     {
-      text: "Без пересадок",
-      key: "withoutTransfers",
+      text: 'Без пересадок',
+      key: 'withoutTransfers',
       onChange: onWithoutTransfersChange,
     },
-    { text: "1 пересадка", key: "oneTransfer", onChange: onOneTransferChange },
+    { text: '1 пересадка', key: 'oneTransfer', onChange: onOneTransferChange },
     {
-      text: "2 пересадки",
-      key: "twoTransfers",
+      text: '2 пересадки',
+      key: 'twoTransfers',
       onChange: onTwoTransfersChange,
     },
     {
-      text: "3 пересадки",
-      key: "threeTransfers",
+      text: '3 пересадки',
+      key: 'threeTransfers',
       onChange: onThreeTransfersChange,
     },
   ];
@@ -35,15 +35,15 @@ const TransplantFilter = ({
           onChange={onChange}
           checked={transfers[key]}
           type="checkbox"
-          className="input visuable-hidden"
+          className={`${classes.input} ${classes['visuable-hidden']}`}
         />
-        <span className="checker"></span>
+        <span className={classes.checker}></span>
         {text}
       </label>
     </li>
   ));
   return (
-    <div className="sidebar">
+    <div className={classes.sidebar}>
       <h3>Количество пересадок</h3>
       <form>
         <ul>{transfersNodes}</ul>
@@ -60,11 +60,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onAllChange: () => dispatch({ type: "all" }),
-    onWithoutTransfersChange: () => dispatch({ type: "withoutTransfers" }),
-    onOneTransferChange: () => dispatch({ type: "oneTransfer" }),
-    onTwoTransfersChange: () => dispatch({ type: "twoTransfers" }),
-    onThreeTransfersChange: () => dispatch({ type: "threeTransfers" }),
+    onAllChange: () => dispatch({ type: 'all' }),
+    onWithoutTransfersChange: () => dispatch({ type: 'withoutTransfers' }),
+    onOneTransferChange: () => dispatch({ type: 'oneTransfer' }),
+    onTwoTransfersChange: () => dispatch({ type: 'twoTransfers' }),
+    onThreeTransfersChange: () => dispatch({ type: 'threeTransfers' }),
   };
 };
 

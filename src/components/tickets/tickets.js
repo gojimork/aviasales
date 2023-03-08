@@ -206,7 +206,7 @@ const Tickets = () => {
           </div>
         </li>
       </ul>
-      <button className="more-tickets">Показать еще 5 билетов!</button>
+      <button className={classes['more-tickets']}>Показать еще 5 билетов!</button>
     </React.Fragment>
   );
 };

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const initialState = {
   transfers: {
     all: false,
@@ -12,28 +14,7 @@ const initialState = {
     optimal: false,
   },
 
-  tickets: [
-    {
-      price: 24260,
-      carrier: 'W6',
-      segments: [
-        {
-          origin: 'MOW',
-          destination: 'HKT',
-          date: '2023-11-07T19:21:46.655Z',
-          duration: 554,
-          stops: [],
-        },
-        {
-          origin: 'HKT',
-          destination: 'MOW',
-          date: '2024-03-02T21:50:38.062Z',
-          duration: 841,
-          stops: ['DXB'],
-        },
-      ],
-    },
-  ],
+  ticketsData: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -42,8 +23,8 @@ const reducer = (state = initialState, action) => {
   const { transfers } = newState;
 
   if (type === 'loadTickets') {
-    newState.tickets = action.ticketsData;
-    console.log(newState.tickets);
+    newState.ticketsData = action.ticketsData;
+    newState.ticketsData.forEach((ticket) => (ticket.id = uuidv4()));
     return newState;
   }
 

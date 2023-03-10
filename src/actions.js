@@ -1,5 +1,5 @@
 class ServerError extends Error {
-  constructor(message, func, arg) {
+  constructor(message) {
     super(message);
     this.name = 'ServerError';
   }

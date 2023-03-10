@@ -13,7 +13,6 @@ const composeEnhancers =
 
 const loggerMiddleware = (store) => (next) => (action) => {
   const result = next(action);
-  console.log('Middleware', store.getState());
   return result;
 };
 

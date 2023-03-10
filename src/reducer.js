@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { addMinutes, format } from 'date-fns';
 
 const initialState = {
   transfers: {
@@ -17,14 +18,67 @@ const initialState = {
   ticketsData: [],
 };
 
+const ticketsDataTransform = (ticketsData) => {
+  const formatPrice = (price) => {
+    const str = String(price);
+    const s = str.length;
+    const chars = str.split('');
+    const strWithSpaces = chars.reduceRight((acc, char, i) => {
+      const spaceOrNothing = (s - i) % 3 === 0 ? ' ' : '';
+      return spaceOrNothing + char + acc;
+    }, '');
+
+    return `${strWithSpaces[0] === ' ' ? strWithSpaces.slice(1) : strWithSpaces} Р`;
+  };
+  const durationTransform = (duration) => {
+    const hours = Math.floor(duration / 60);
+    const min = duration % 60;
+    return `${hours}ч ${min}м`;
+  };
+  const dateTransform = (date, duration) => {
+    const departureDate = new Date(date);
+    const departureTime = format(departureDate, 'HH:mm');
+    const arrivalDate = addMinutes(new Date(date), duration);
+    const arrivalTime = format(arrivalDate, 'HH:mm');
+    return `${departureTime} - ${arrivalTime}`;
+  };
+  const transplants = (stops) => {
+    const count = stops.length;
+    return count === 0 ? 'Без пересадок' : count === 1 ? '1 пересадка' : `${count} пересадки`;
+  };
+  const newTicketsData = ticketsData.map((ticket) => {
+    const { segments, ...newTicket } = ticket;
+    return newTicket;
+  });
+  newTicketsData.forEach((ticket, index) => {
+    const { segments } = ticketsData[index];
+    ticket.id = uuidv4();
+    ticket.priceRender = formatPrice(ticketsData[index].price);
+    ticket.logoUrl = `https://pics.avs.io/99/36/${ticketsData[index].carrier}.png`;
+    ticket.flight = segments[0].origin + ' - ' + segments[0].destination;
+    ticket.flightBack = segments[1].origin + ' - ' + segments[1].destination;
+    ticket.time = dateTransform(segments[0].date, segments[0].duration);
+    ticket.timeBack = dateTransform(segments[1].date, segments[1].duration);
+    ticket.duration = durationTransform(segments[0].duration);
+    ticket.durationBack = durationTransform(segments[1].duration);
+    ticket.stopsCount = segments[0].stops.length;
+    ticket.stopsCountRender = transplants(segments[0].stops);
+    ticket.stopsList = segments[0].stops.join(', ');
+    ticket.stopsCountBack = segments[1].stops.length;
+    ticket.stopsCountRenderBack = transplants(segments[1].stops);
+    ticket.stopsListBack = segments[1].stops.join(', ');
+  });
+
+  return newTicketsData;
+};
+
 const reducer = (state = initialState, action) => {
   const newState = JSON.parse(JSON.stringify(state));
   const { type } = action;
   const { transfers } = newState;
 
   if (type === 'loadTickets') {
-    newState.ticketsData = action.ticketsData;
-    newState.ticketsData.forEach((ticket) => (ticket.id = uuidv4()));
+    newState.ticketsData = ticketsDataTransform(action.ticketsData);
     return newState;
   }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classes from './tickets.module.scss';
+import { loadTickets } from '../../actions';
 const Tickets = ({ ticketsData, loadTickets }) => {
   console.log(ticketsData);
   useEffect(() => {
@@ -84,15 +85,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loadTickets: async () => {
-      const responseId = await fetch('https://aviasales-test-api.kata.academy/search');
-      const bodyId = await responseId.json();
-      const searchId = bodyId.searchId;
-      const responseTickets = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`);
-      const bodyTickets = await responseTickets.json();
-      const ticketsArr = bodyTickets.tickets;
-      dispatch({ type: 'loadTickets', ticketsData: ticketsArr });
-    },
+    loadTickets: loadTickets(dispatch),
   };
 };
 

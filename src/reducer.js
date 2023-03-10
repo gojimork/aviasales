@@ -52,7 +52,8 @@ const ticketsDataTransform = (ticketsData) => {
   });
   newTicketsData.forEach((ticket, index) => {
     const { segments } = ticketsData[index];
-    ticket.id = uuidv4();
+    const id = uuidv4();
+    ticket.id = id;
     ticket.priceRender = formatPrice(ticketsData[index].price);
     ticket.logoUrl = `https://pics.avs.io/99/36/${ticketsData[index].carrier}.png`;
     ticket.flight = segments[0].origin + ' - ' + segments[0].destination;
@@ -78,7 +79,7 @@ const reducer = (state = initialState, action) => {
   const { transfers } = newState;
 
   if (type === 'loadTickets') {
-    newState.ticketsData = ticketsDataTransform(action.ticketsData);
+    newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)];
     return newState;
   }
 

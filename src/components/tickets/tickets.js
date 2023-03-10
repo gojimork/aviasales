@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { addMinutes, format } from 'date-fns';
 import { connect } from 'react-redux';
-import s7Logo from '../../assets/s7-logo.svg';
 import classes from './tickets.module.scss';
 const Tickets = ({ ticketsData, loadTickets }) => {
   console.log(ticketsData);
@@ -9,7 +8,7 @@ const Tickets = ({ ticketsData, loadTickets }) => {
     loadTickets();
   }, [loadTickets]);
 
-  const ticketList = ticketsData.map(({ id, price, segments }) => {
+  const ticketList = ticketsData.map(({ id, price, segments, carrier }) => {
     const transplants = (stops) => {
       const count = stops.length;
       return count === 0 ? 'Без пересадок' : count === 1 ? '1 пересадка' : `${count} пересадки`;
@@ -32,7 +31,7 @@ const Tickets = ({ ticketsData, loadTickets }) => {
         <div className={classes['ticket__header']}>
           <span className={classes['ticket__price']}>{price}</span>
           <div className={classes['ticket__logo']}>
-            <img src={s7Logo} alt="logo" />
+            <img src={`https://pics.avs.io/99/36/${carrier}.png`} alt="logo" />
           </div>
         </div>
         <div className={classes['ticket__flight']}>

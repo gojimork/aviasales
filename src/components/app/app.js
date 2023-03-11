@@ -13,8 +13,10 @@ function App() {
         </div>
         <div className={classes.main}>
           <TransplantFilter />
-          <PriorityFilter />
-          <Tickets />
+          <div className={classes['sort-tickets']}>
+            <PriorityFilter />
+            <Tickets />
+          </div>
         </div>
       </div>
     </div>

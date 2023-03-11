@@ -75,7 +75,9 @@ const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick, empt
       Показать еще 5 билетов!
     </button>
   ) : null;
-  const alert = emptyList ? <Alert message="Informational Notes" type="info" showIcon /> : null;
+  const alert = emptyList ? (
+    <Alert message="Рейсов, подходящих под заданные фильтры, не найдено" type="info" showIcon />
+  ) : null;
 
   return (
     <React.Fragment>

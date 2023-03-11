@@ -6,12 +6,17 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import reduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    : compose;
+const actionSanitizer = (action) =>
+  action.type === 'loadTickets' && action.ticketsData ? { ...action, ticketsData: '<<LONG_BLOB>>' } : action;
 
-const enhancer = composeEnhancers(applyMiddleware(reduxThunk));
+const enhancer = compose(
+  applyMiddleware(reduxThunk),
+  window.__REDUX_DEVTOOLS_EXTENSION__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION__({
+      actionSanitizer,
+      stateSanitizer: (state) => (state.ticketsData ? { ...state, ticketsData: '<<LONG_BLOB>>' } : state),
+    })
+);
 
 const store = createStore(reducer, enhancer);
 

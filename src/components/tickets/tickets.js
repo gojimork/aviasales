@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classes from './tickets.module.scss';
 import { loadTickets } from '../../actions';
-const Tickets = ({ ticketsData, loadTickets }) => {
+import { Spin } from 'antd';
+
+const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick }) => {
+  console.log(renderTickets);
   useEffect(() => {
     loadTickets();
   }, [loadTickets]);
 
-  const ticketList = ticketsData.map(
+  const ticketList = renderTickets.map(
     ({
       id,
       priceRender,
@@ -70,21 +73,26 @@ const Tickets = ({ ticketsData, loadTickets }) => {
 
   return (
     <React.Fragment>
+      <Spin spinning={loader} />
       <ul className={classes['tickets-list']}>{ticketList}</ul>
-      <button className={classes['more-tickets']}>Показать еще 5 билетов!</button>
+      <button onClick={onMoreTicketseClick} className={classes['more-tickets']}>
+        Показать еще 5 билетов!
+      </button>
     </React.Fragment>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    ticketsData: state.renderTickets,
+    renderTickets: state.renderTickets,
+    loader: state.loader,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     loadTickets: loadTickets(dispatch),
+    onMoreTicketseClick: () => dispatch({ type: 'SHOW_MORE' }),
   };
 };
 

@@ -23,7 +23,7 @@ export const loadTickets = (dispatch) => async () => {
       if (!bodyTickets.stop) {
         getTickets(searchId);
       } else {
-        console.log('Всё!');
+        dispatch({ type: 'LOADED' });
       }
     };
     getTickets(searchId);

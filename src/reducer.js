@@ -18,6 +18,10 @@ const initialState = {
   ticketsData: [],
 
   renderTickets: [],
+
+  loader: true,
+
+  listLength: 5,
 };
 
 const ticketsDataTransform = (ticketsData) => {
@@ -80,7 +84,7 @@ const ticketsDataTransform = (ticketsData) => {
 const reducer = (state = initialState, action) => {
   const newState = JSON.parse(JSON.stringify(state));
   const { type } = action;
-  const { transfers, priorities } = newState;
+  const { transfers, priorities, listLength } = newState;
 
   const sortFilter = (a, b) => {
     if (priorities.cheapest) {
@@ -112,11 +116,22 @@ const reducer = (state = initialState, action) => {
       );
     }
 
-    newState.renderTickets = renderCandidat.sort(sortFilter);
+    newState.renderTickets = renderCandidat.sort(sortFilter).slice(0, listLength);
   };
 
   if (type === 'loadTickets') {
     newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)];
+    renderTicketsFn();
+    return newState;
+  }
+
+  if (type === 'LOADED') {
+    newState.loader = false;
+    return newState;
+  }
+
+  if (type === 'SHOW_MORE') {
+    newState.listLength = listLength + 5;
     renderTicketsFn();
     return newState;
   }
@@ -157,9 +172,11 @@ const reducer = (state = initialState, action) => {
 
   if (type === 'all' && transfers.all === false) {
     for (let key in newState.transfers) transfers[key] = true;
+    renderTicketsFn();
     return newState;
   } else if (type === 'all' && transfers.all === true) {
     for (let key in newState.transfers) transfers[key] = false;
+    renderTicketsFn();
     return newState;
   }
 

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classes from './tickets.module.scss';
 import { loadTickets } from '../../actions';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 
-const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick }) => {
+const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick, emptyList }) => {
   console.log(renderTickets);
   useEffect(() => {
     loadTickets();
@@ -75,10 +75,12 @@ const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick }) =>
       Показать еще 5 билетов!
     </button>
   ) : null;
+  const alert = emptyList ? <Alert message="Informational Notes" type="info" showIcon /> : null;
 
   return (
     <React.Fragment>
       <Spin spinning={loader} />
+      {alert}
       <ul className={classes['tickets-list']}>{ticketList}</ul>
       {btn}
     </React.Fragment>
@@ -89,6 +91,7 @@ const mapStateToProps = (state) => {
   return {
     renderTickets: state.renderTickets,
     loader: state.loader,
+    emptyList: state.emptyList,
   };
 };
 

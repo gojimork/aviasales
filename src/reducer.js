@@ -22,6 +22,8 @@ const initialState = {
   loader: true,
 
   listLength: 5,
+
+  emptyList: false,
 };
 
 const ticketsDataTransform = (ticketsData) => {
@@ -114,6 +116,12 @@ const reducer = (state = initialState, action) => {
       renderCandidat = renderCandidat.filter(
         ({ stopsCount, stopsCountBack }) => stopsCountBack !== 3 && stopsCount !== 3
       );
+    }
+
+    if (renderCandidat.length === 0 && !newState.loader) {
+      newState.emptyList = true;
+    } else {
+      newState.emptyList = false;
     }
 
     newState.renderTickets = renderCandidat.sort(sortFilter).slice(0, listLength);

@@ -11,12 +11,9 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-const loggerMiddleware = (store) => (next) => (action) => {
-  const result = next(action);
-  return result;
-};
+const enhancer = composeEnhancers(applyMiddleware(reduxThunk));
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(loggerMiddleware, reduxThunk)));
+const store = createStore(reducer, enhancer);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

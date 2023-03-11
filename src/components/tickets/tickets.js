@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classes from './tickets.module.scss';
 import { loadTickets } from '../../actions';
 const Tickets = ({ ticketsData, loadTickets }) => {
-  console.log(ticketsData);
+  console.log('ререндор Tickets', ticketsData);
   useEffect(() => {
     loadTickets();
   }, [loadTickets]);
@@ -17,8 +17,8 @@ const Tickets = ({ ticketsData, loadTickets }) => {
       flightBack,
       time,
       timeBack,
-      duration,
-      durationBack,
+      durationRender,
+      durationRenderBack,
       stopsCountRender,
       stopsList,
       stopsCountRenderBack,
@@ -46,11 +46,11 @@ const Tickets = ({ ticketsData, loadTickets }) => {
             <div className={classes['info-list']}>
               <div className={classes.info}>
                 <span className={classes['info__title']}>В пути</span>
-                <span className={classes['info__value']}>{duration}</span>
+                <span className={classes['info__value']}>{durationRender}</span>
               </div>
               <div className={classes.info}>
                 <span className={classes['info__title']}>В пути</span>
-                <span className={classes['info__value']}>{durationBack}</span>
+                <span className={classes['info__value']}>{durationRenderBack}</span>
               </div>
             </div>
             <div className={classes['info-list']}>
@@ -79,7 +79,7 @@ const Tickets = ({ ticketsData, loadTickets }) => {
 
 const mapStateToProps = (state) => {
   return {
-    ticketsData: state.ticketsData,
+    ticketsData: state.renderTickets,
   };
 };
 

@@ -3,19 +3,21 @@ import { addMinutes, format } from 'date-fns';
 
 const initialState = {
   transfers: {
-    all: false,
-    withoutTransfers: false,
-    oneTransfer: false,
-    twoTransfers: false,
-    threeTransfers: false,
+    all: true,
+    withoutTransfers: true,
+    oneTransfer: true,
+    twoTransfers: true,
+    threeTransfers: true,
   },
   priorities: {
-    cheapest: true,
-    quickest: false,
+    cheapest: false,
+    quickest: true,
     optimal: false,
   },
 
   ticketsData: [],
+
+  renderTickets: [],
 };
 
 const ticketsDataTransform = (ticketsData) => {
@@ -60,8 +62,10 @@ const ticketsDataTransform = (ticketsData) => {
     ticket.flightBack = segments[1].origin + ' - ' + segments[1].destination;
     ticket.time = dateTransform(segments[0].date, segments[0].duration);
     ticket.timeBack = dateTransform(segments[1].date, segments[1].duration);
-    ticket.duration = durationTransform(segments[0].duration);
-    ticket.durationBack = durationTransform(segments[1].duration);
+    ticket.durationRender = durationTransform(segments[0].duration);
+    ticket.durationRenderBack = durationTransform(segments[1].duration);
+    ticket.duration = segments[0].duration;
+    ticket.durationBack = segments[1].duration;
     ticket.stopsCount = segments[0].stops.length;
     ticket.stopsCountRender = transplants(segments[0].stops);
     ticket.stopsList = segments[0].stops.join(', ');
@@ -76,10 +80,20 @@ const ticketsDataTransform = (ticketsData) => {
 const reducer = (state = initialState, action) => {
   const newState = JSON.parse(JSON.stringify(state));
   const { type } = action;
-  const { transfers } = newState;
+  const { transfers, priorities } = newState;
+
+  const sortFilter = (a, b) => {
+    if (priorities.cheapest) {
+      return a.price - b.price;
+    } else if (priorities.quickest) {
+      return a.duration + a.durationBack - b.duration - b.durationBack;
+    }
+  };
 
   if (type === 'loadTickets') {
-    newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)];
+    newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)].sort(sortFilter);
+
+    newState.renderTickets = JSON.parse(JSON.stringify(newState.ticketsData)).splice(0, 5);
     return newState;
   }
 
@@ -87,6 +101,8 @@ const reducer = (state = initialState, action) => {
     const { withoutTransfers, oneTransfer, twoTransfers, threeTransfers } = transfers;
     if (withoutTransfers && oneTransfer && twoTransfers && threeTransfers) {
       transfers.all = true;
+    } else {
+      transfers.all = false;
     }
   };
 
@@ -100,28 +116,28 @@ const reducer = (state = initialState, action) => {
 
   if (type === 'withoutTransfers') {
     transfers.withoutTransfers = !transfers.withoutTransfers;
-    if (transfers.all) transfers.all = false;
     checkAllBox();
+
+    if (transfers.withoutTransfers) {
+    }
     return newState;
   }
 
   if (type === 'oneTransfer') {
     transfers.oneTransfer = !transfers.oneTransfer;
-    if (transfers.all) transfers.all = false;
     checkAllBox();
+
     return newState;
   }
 
   if (type === 'twoTransfers') {
     transfers.twoTransfers = !transfers.twoTransfers;
-    if (transfers.all) transfers.all = false;
     checkAllBox();
     return newState;
   }
 
   if (type === 'threeTransfers') {
     transfers.threeTransfers = !transfers.threeTransfers;
-    if (transfers.all) transfers.all = false;
     checkAllBox();
     return newState;
   }

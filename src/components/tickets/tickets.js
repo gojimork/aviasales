@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import classes from './tickets.module.scss';
 import { loadTickets } from '../../actions';
 const Tickets = ({ ticketsData, loadTickets }) => {
-  console.log('ререндор Tickets', ticketsData);
   useEffect(() => {
     loadTickets();
   }, [loadTickets]);

@@ -10,8 +10,8 @@ const initialState = {
     threeTransfers: true,
   },
   priorities: {
-    cheapest: false,
-    quickest: true,
+    cheapest: true,
+    quickest: false,
     optimal: false,
   },
 
@@ -90,10 +90,59 @@ const reducer = (state = initialState, action) => {
     }
   };
 
-  if (type === 'loadTickets') {
-    newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)].sort(sortFilter);
+  const renderTicketsFn = () => {
+    const { withoutTransfers, oneTransfer, twoTransfers, threeTransfers } = transfers;
+    let renderCandidat = JSON.parse(JSON.stringify(newState.ticketsData));
+    if (!withoutTransfers) {
+      renderCandidat = renderCandidat.filter(({ stopsCount, stopsCountBack }) => stopsCountBack && stopsCount);
+    }
+    if (!oneTransfer) {
+      renderCandidat = renderCandidat.filter(
+        ({ stopsCount, stopsCountBack }) => stopsCountBack !== 1 && stopsCount !== 1
+      );
+    }
+    if (!twoTransfers) {
+      renderCandidat = renderCandidat.filter(
+        ({ stopsCount, stopsCountBack }) => stopsCountBack !== 2 && stopsCount !== 2
+      );
+    }
+    if (!threeTransfers) {
+      renderCandidat = renderCandidat.filter(
+        ({ stopsCount, stopsCountBack }) => stopsCountBack !== 3 && stopsCount !== 3
+      );
+    }
 
-    newState.renderTickets = JSON.parse(JSON.stringify(newState.ticketsData)).splice(0, 5);
+    newState.renderTickets = renderCandidat.sort(sortFilter);
+  };
+
+  if (type === 'loadTickets') {
+    newState.ticketsData = [...newState.ticketsData, ...ticketsDataTransform(action.ticketsData)];
+    renderTicketsFn();
+    return newState;
+  }
+
+  if (type === 'QUICKEST') {
+    priorities.cheapest = false;
+    priorities.optimal = false;
+    priorities.quickest = true;
+    newState.ticketsData.sort(sortFilter);
+    renderTicketsFn();
+    return newState;
+  }
+
+  if (type === 'CHEAPEST') {
+    priorities.optimal = false;
+    priorities.quickest = false;
+    priorities.cheapest = true;
+    newState.ticketsData.sort(sortFilter);
+    renderTicketsFn();
+    return newState;
+  }
+
+  if (type === 'OPTIMAL') {
+    priorities.quickest = false;
+    priorities.cheapest = false;
+    priorities.optimal = true;
     return newState;
   }
 
@@ -117,28 +166,28 @@ const reducer = (state = initialState, action) => {
   if (type === 'withoutTransfers') {
     transfers.withoutTransfers = !transfers.withoutTransfers;
     checkAllBox();
-
-    if (transfers.withoutTransfers) {
-    }
+    renderTicketsFn();
     return newState;
   }
 
   if (type === 'oneTransfer') {
     transfers.oneTransfer = !transfers.oneTransfer;
     checkAllBox();
-
+    renderTicketsFn();
     return newState;
   }
 
   if (type === 'twoTransfers') {
     transfers.twoTransfers = !transfers.twoTransfers;
     checkAllBox();
+    renderTicketsFn();
     return newState;
   }
 
   if (type === 'threeTransfers') {
     transfers.threeTransfers = !transfers.threeTransfers;
     checkAllBox();
+    renderTicketsFn();
     return newState;
   }
   return state;

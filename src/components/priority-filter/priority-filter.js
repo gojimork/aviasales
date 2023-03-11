@@ -1,18 +1,20 @@
 import { connect } from 'react-redux';
 import classes from './priority-filter.module.scss';
 
-const PriorityFilter = ({ priorities }) => {
+const PriorityFilter = ({ priorities, onCheapestClick, onQuickestClick, onOptimalClick }) => {
   const priorityNames = [
-    { content: 'Самый дешевый', key: 'cheapest' },
-    { content: 'Самый быстрый', key: 'quickest' },
-    { content: 'Оптимальный', key: 'optimal' },
+    { content: 'Самый дешевый', key: 'cheapest', onClick: onCheapestClick },
+    { content: 'Самый быстрый', key: 'quickest', onClick: onQuickestClick },
+    { content: 'Оптимальный', key: 'optimal', onClick: onOptimalClick },
   ];
 
-  const priotityNodes = priorityNames.map(({ content, key }) => {
+  const priotityNodes = priorityNames.map(({ content, key, onClick }) => {
     const btnClass = `${classes['filter-item']} ${priorities[key] && classes['filter-item--active']}`;
     return (
       <li key={key}>
-        <button className={btnClass}>{content}</button>
+        <button onClick={onClick} className={btnClass}>
+          {content}
+        </button>
       </li>
     );
   });
@@ -25,4 +27,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(PriorityFilter);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onCheapestClick: () => dispatch({ type: 'CHEAPEST' }),
+    onQuickestClick: () => dispatch({ type: 'QUICKEST' }),
+    onOptimalClick: () => dispatch({ type: 'OPTIMAL' }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PriorityFilter);

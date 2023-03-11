@@ -70,14 +70,17 @@ const Tickets = ({ renderTickets, loadTickets, loader, onMoreTicketseClick }) =>
       );
     }
   );
+  const btn = renderTickets.length ? (
+    <button onClick={onMoreTicketseClick} className={classes['more-tickets']}>
+      Показать еще 5 билетов!
+    </button>
+  ) : null;
 
   return (
     <React.Fragment>
       <Spin spinning={loader} />
       <ul className={classes['tickets-list']}>{ticketList}</ul>
-      <button onClick={onMoreTicketseClick} className={classes['more-tickets']}>
-        Показать еще 5 билетов!
-      </button>
+      {btn}
     </React.Fragment>
   );
 };
